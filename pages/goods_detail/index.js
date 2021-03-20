@@ -23,9 +23,10 @@ Page({
         // console.log(options);
         this.getGoodsDetail(goods_id);
     },
+    //获取详情数据
     async getGoodsDetail(goods_id) {
         const goodsObj = await request({ url: "/goods/detail", data: { goods_id } })
-        console.log(goodsObj);
+            // console.log(goodsObj);
         this.GoodsInfo = goodsObj
         this.setData({
             goodsObj: {
@@ -49,11 +50,13 @@ Page({
             urls
         })
     },
+    //加入购物车
     handleCartAdd() {
         let cart = wx.getStorageSync("cart") || [];
         let index = cart.findIndex(v => v.goods_id === this.GoodsInfo.goods_id);
         if (index === -1) {
             this.GoodsInfo.num = 1;
+            this.GoodsInfo.checked = true;
             cart.push(this.GoodsInfo);
         } else {
             cart[index].num++;
