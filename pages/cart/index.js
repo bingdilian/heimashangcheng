@@ -25,9 +25,13 @@
     4.获取data中的购物车数组，获取被修改的商品对象
     5.直接修改商品对象中的数量 num值
     6.把cart数组 重新设置到缓存和data中 this.setCart
+    7.数量不能为负数
+  8.点击结算
+    1.判断有无地址和商品
+    2.都有跳转结算页面
 
 */
-import { getSetting, chooseAddress, openSetting } from '../../utils/asyncWx'
+import { getSetting, chooseAddress, openSetting, showModal, showToast } from '../../utils/asyncWx'
 import regeneratorRuntime from '../../lib/runtime/runtime'
 
 Page({
@@ -62,6 +66,7 @@ Page({
         this.setData({ address })
         this.setCart(cart);
     },
+    //点击 获取收货地址
     async handleChooseAddress() {
         try {
             const res1 = await getSetting();
@@ -115,6 +120,7 @@ Page({
             allChecked
         });
         wx.setStorageSync("cart", cart);
+        // console.log(cart);
     },
     //商品全选
     handleItemAllCheck() {
@@ -128,7 +134,7 @@ Page({
         this.setCart(cart);
     },
     //商品数量编辑功能
-    handleItemNumEdit(e) {
+    async handleItemNumEdit(e) {
         //1.获取传递过来的参数
         const { operation, id } = e.currentTarget.dataset;
         // console.log(operation, id);
@@ -136,11 +142,35 @@ Page({
         let { cart } = this.data;
         //3.找到需要修改的商品索引
         const index = cart.findIndex(v => v.goods_id === id);
-        //4.进行修改数量
-        cart[index].num += operation;
-        //5.设置回data中
-        this.setCart(cart);
-
+        if (cart[index].num === 1 && operation === -1) {
+            const res = await showModal({ content: "是否要删除" })
+            if (res.confirm) {
+                cart.splice(index, 1);
+                this.setCart(cart);
+            }
+        } else {
+            //4.进行修改数量
+            cart[index].num += operation;
+            //5.设置回data中
+            this.setCart(cart);
+        }
+    },
+    //点击结算
+    async handelPay() {
+        //判断地址和商品
+        const { address, totalNum } = this.data;
+        if (!address.userName) {
+            await showToast({ title: '还没选择收货地址' })
+            return;
+        }
+        if (totalNum === 0) {
+            await showToast({ title: '购物车为空' })
+            return;
+        }
+        //全部验证 跳转支付
+        wx.navigateTo({
+            url: '/pages/pay/index',
+        });
     },
     /**
      * 生命周期函数--监听页面初次渲染完成

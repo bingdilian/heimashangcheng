@@ -81,6 +81,14 @@ page {
 .cart_content .cart_main .cart_item .cart_info_wrap .goods_price_wrap .cart_num_tool .num_deit {
   border: 1rpx solid #ccc;
 }
+.cart_content .cart_main .switchTabTo {
+  background-color: #fff;
+  padding: 30rpx 0;
+}
+.cart_content .cart_main .switchTabTo button {
+  background-color: #fff;
+  color: var(--themeColor);
+}
 .footer_tool {
   position: fixed;
   left: 0;

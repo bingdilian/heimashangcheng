@@ -23,6 +23,18 @@
           "pathName": "pages/cart/index",
           "query": "goods_id=43986",
           "scene": null
+        },
+        {
+          "name": "pages/pay/index",
+          "pathName": "pages/pay/index",
+          "query": "goods_id=43986",
+          "scene": null
+        },
+        {
+          "name": "授权",
+          "pathName": "pages/auth/index",
+          "query": "goods_id=43986",
+          "scene": null
         }
       ]
     }
